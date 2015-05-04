@@ -52,6 +52,11 @@ bool is_left(struct node * n)
     return n == left;
 }
 
+bool is_right(struct node * n)
+{
+    return ! is_left(n);
+}
+
 struct node * get_sibling(struct node * n)
 {
     struct node * parent;
