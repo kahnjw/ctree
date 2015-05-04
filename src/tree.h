@@ -93,7 +93,7 @@ void delete(struct node * n)
         delete(n->left);
     }
 
-    if (n->right !=NULL) {
+    if (n->right != NULL) {
         delete(n->right);
     }
 
