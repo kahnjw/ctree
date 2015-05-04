@@ -4,10 +4,16 @@
 *.o
 *.obj
 
+# Object files
+*.o
+*.ko
+*.obj
+
 # Precompiled Headers
 *.gch
 *.pch
 
+<<<<<<< HEAD
 # Compiled Dynamic libraries
 *.so
 *.dylib
@@ -22,6 +28,18 @@
 *.a
 *.lib
 
+# Libraries
+*.lib
+*.a
+*.la
+*.lo
+
+# Shared objects (inc. Windows DLLs)
+*.dll
+*.so
+*.so.*
+*.dylib
+
 # Executables
 *.exe
 *.out
@@ -29,3 +47,9 @@
 
 build/
 test_executable.*
+*.i*86
+*.x86_64
+*.hex
+
+# Debug files
+*.dSYM/
