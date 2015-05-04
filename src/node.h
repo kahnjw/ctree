@@ -11,27 +11,15 @@ struct node
     struct node * parent;
 };
 
-long hash_sdbm(const char * str)
-{
-    long hash = 0;
-    int c;
-
-    /* Move through the char * bit by bit, scramble hash
-     * and add it to the accumulated hash value.
-     */
-    while ((c = *str++))
-        hash = c + (hash << 6) + (hash << 16) - hash;
-
-    return hash;
-}
-
-struct node * construct_node(const char * key, void * value)
+struct node * construct_node(long key, void * value)
 {
     struct node * n =  (struct node*) malloc(sizeof(struct node));
-    long hashed_key = hash_sdbm(key);
 
-    n->key = hashed_key;
+    n->key = key;
     n->value = value;
+    n->left = NULL;
+    n->right = NULL;
+    n->parent = NULL;
 
     return n;
 }

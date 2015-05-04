@@ -1,6 +1,8 @@
 CFLAGS=-Wall -pedantic -Wextra
 
-test: test/spec.c
+testit: test/node_spec.c test/tree_spec.c
 	mkdir -p build
-	$(CC) $(CFLAGS) -Iinclude -o build/spec test/spec.c
-	build/spec
+	$(CC) $(CFLAGS) -Iinclude -o build/node_spec test/node_spec.c
+	$(CC) $(CFLAGS) -Iinclude -o build/tree_spec test/tree_spec.c
+	build/node_spec
+	build/tree_spec
