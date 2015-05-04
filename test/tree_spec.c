@@ -16,11 +16,11 @@ int main()
             set("key3", "value3", &t);
             set("key4", "value4", &t);
 
-            check(! strcmp(get("key0", &t), "value0"));
-            check(! strcmp(get("key1", &t), "value1"));
-            check(! strcmp(get("key2", &t), "value2"));
-            check(! strcmp(get("key3", &t), "value3"));
-            check(! strcmp(get("key4", &t), "value4"));
+            str_eq(get("key0", &t), "value0");
+            str_eq(get("key1", &t), "value1");
+            str_eq(get("key2", &t), "value2");
+            str_eq(get("key3", &t), "value3");
+            str_eq(get("key4", &t), "value4");
 
             delete_tree(&t);
         })

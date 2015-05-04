@@ -2,6 +2,7 @@
 #define CHECK_H
 
 #include <stdio.h>
+#include <string.h>
 
 static int check_passed = 0, check_failed = 0, check_skipped = 0,
            current_level = 0;
@@ -43,6 +44,25 @@ static const char *red = "\x1b[31m",
       check_passed++; \
     } else {\
       printf("%s%s %s (%s:%d)\n", red, cross, message, __FILE__, __LINE__); \
+      check_failed++; \
+      skip = 1; \
+    } \
+  } \
+} while(0);
+
+#define str_eq(str0, str1) str_eqm((str0), (str1), #str0 #str1);
+
+#define str_eqm(str0, str1, message) do {\
+  indent(current_level); \
+  if(skip) { \
+    printf("%s? %s%s\n", blue, message, end); \
+    check_skipped++; \
+  } else {\
+    if(! strcmp(str0, str1)) {\
+      printf("%s%s %s\n", green, tick, message); \
+      check_passed++; \
+    } else {\
+      printf("%s%s %s != %s (%s:%d)\n", red, cross, str0, str1, __FILE__, __LINE__); \
       check_failed++; \
       skip = 1; \
     } \
