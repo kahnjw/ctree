@@ -29,39 +29,32 @@ struct node * construct_node(long key, void * value)
 
 bool is_left(struct node * n)
 {
-    struct node * parent;
-    struct node * left;
-
-    parent = n->parent;
-
-    if (parent == NULL) {
+    if (n == NULL || n->parent == NULL) {
         return false;
     }
 
-    left = parent->left;
-
-    return n == left;
+    return n == n->parent->left;
 }
 
 bool is_right(struct node * n)
 {
-    return ! is_left(n);
+    if (n == NULL || n->parent == NULL) {
+        return false;
+    }
+
+    return n == n->parent->right;
 }
 
 struct node * get_sibling(struct node * n)
 {
-    struct node * parent;
-
-    parent = n->parent;
-
-    if (parent == NULL) {
+    if (n->parent == NULL) {
         return NULL;
     }
 
     if(is_left(n)) {
-        return parent->right;
+        return n->parent->right;
     }
 
-    return parent->left;
+    return n->parent->left;
 }
 
