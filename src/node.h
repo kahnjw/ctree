@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
+#include <stdbool.h>
 
 struct node
 {
@@ -9,6 +10,7 @@ struct node
     struct node * left;
     struct node * right;
     struct node * parent;
+    bool is_red;
 };
 
 struct node * construct_node(long key, void * value)
@@ -20,6 +22,7 @@ struct node * construct_node(long key, void * value)
     n->left = NULL;
     n->right = NULL;
     n->parent = NULL;
+    n->is_red = true;
 
     return n;
 }

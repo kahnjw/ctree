@@ -3,27 +3,52 @@
 #include "lib/check.h"
 #include "../src/tree.h"
 
+void tostring(char str[], int num)
+{
+    int i, rem, len = 0, n;
+
+    n = num;
+    while (n != 0)
+    {
+        len++;
+        n /= 10;
+    }
+    for (i = 0; i < len; i++)
+    {
+        rem = num % 10;
+        num = num / 10;
+        str[len - (i + 1)] = rem + '0';
+    }
+    str[len] = '\0';
+}
 
 int main()
 {
     describe("tree struct", {
-        it("sets and gets items", {
+        it("gets nodes from a large tree", {
             struct tree t;
+            int i;
+            char * buffer = (char *)malloc(4);
 
-            set("key0", "value0", &t);
-            set("key1", "value1", &t);
-            set("key2", "value2", &t);
-            set("key3", "value3", &t);
-            set("key4", "value4", &t);
+            for (i = 0; i < 1000; i++) {
+                tostring(buffer, i);
+                set(buffer, buffer, &t);
+            }
 
-            str_eq(get("key0", &t), "value0");
-            str_eq(get("key1", &t), "value1");
-            str_eq(get("key2", &t), "value2");
-            str_eq(get("key3", &t), "value3");
-            str_eq(get("key4", &t), "value4");
+            tostring(buffer, 999);
+            str_eq(get(buffer, &t), buffer);
 
-            delete_tree(&t);
-        })
+            tostring(buffer, 567);
+            str_eq(get(buffer, &t), buffer);
+
+            tostring(buffer, 876);
+            str_eq(get(buffer, &t), buffer);
+
+            tostring(buffer, 123);
+            str_eq(get(buffer, &t), buffer);
+
+            free(buffer);
+        });
     });
 
     return 0;
