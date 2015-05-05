@@ -7,7 +7,16 @@
 struct tree
 {
     struct node * root;
+    void (*free_func)(void *);
 };
+
+struct tree construct_tree(void (*free_func)(void *))
+{
+    struct tree t;
+    t.free_func = free_func;
+
+    return t;
+}
 
 long hash_sdbm(const char * str)
 {
@@ -87,14 +96,19 @@ void * get(const char * key, struct tree * t)
     return search(hash_key, t->root);
 }
 
-void delete(struct node * n)
+void delete(struct node * n, struct tree * t)
 {
     if (n->left != NULL) {
-        delete(n->left);
+        delete(n->left, t);
     }
 
     if (n->right != NULL) {
-        delete(n->right);
+        delete(n->right, t);
+    }
+
+    if (n->value != NULL) {
+        t->free_func(n->value);
+        n->value = NULL;
     }
 
     free(n);
@@ -102,6 +116,6 @@ void delete(struct node * n)
 
 void delete_tree(struct tree * t)
 {
-    delete(t->root);
+    delete(t->root, t);
     t->root = NULL;
 }

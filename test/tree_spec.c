@@ -1,36 +1,20 @@
 #include <stdlib.h>
 #include <string.h>
+#include "lib/helpers.h"
 #include "lib/check.h"
 #include "../src/tree.h"
 
-void tostring(char str[], int num)
-{
-    int i, rem, len = 0, n;
-
-    n = num;
-    while (n != 0)
-    {
-        len++;
-        n /= 10;
-    }
-    for (i = 0; i < len; i++)
-    {
-        rem = num % 10;
-        num = num / 10;
-        str[len - (i + 1)] = rem + '0';
-    }
-    str[len] = '\0';
-}
 
 int main()
 {
     describe("tree struct", {
         it("gets nodes from a large tree", {
-            struct tree t;
+            struct tree t = construct_tree(&free);
             int i;
-            char * buffer = (char *)malloc(4);
+            char * buffer;
 
             for (i = 0; i < 1000; i++) {
+                buffer = (char *)malloc(4);
                 tostring(buffer, i);
                 set(buffer, buffer, &t);
             }
@@ -47,7 +31,7 @@ int main()
             tostring(buffer, 123);
             str_eq(get(buffer, &t), buffer);
 
-            free(buffer);
+            delete_tree(&t);
         });
     });
 
