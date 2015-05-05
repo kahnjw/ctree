@@ -10,10 +10,11 @@ struct tree
     void (*free_func)(void *);
 };
 
-struct tree construct_tree(void (*free_func)(void *))
+struct tree * construct_tree(void (*free_func)(void *))
 {
-    struct tree t;
-    t.free_func = free_func;
+    struct tree * t = (struct tree *)malloc(sizeof(struct tree));
+    t->free_func = free_func;
+    t->root = NULL;
 
     return t;
 }
@@ -118,4 +119,5 @@ void delete_tree(struct tree * t)
 {
     delete(t->root, t);
     t->root = NULL;
+    free(t);
 }
