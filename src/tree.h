@@ -33,6 +33,49 @@ long hash_sdbm(const char * str)
     return hash;
 }
 
+void double_red(struct node * child)
+{
+    struct node * parent;
+    struct node * grandparent;
+    struct node * great_grandparent;
+    struct node * uncle;
+
+    parent = child->parent;
+
+    if(parent == NULL) {
+        printf("Node's parent is NULL\n");
+        exit(1);
+    }
+
+    grandparent = parent->parent;
+
+    if(grandparent == NULL) {
+        printf("Node's grandparent is NULL\n");
+        exit(1);
+    }
+
+    uncle = get_sibling(parent);
+
+    if(uncle == NULL || !uncle->is_red) {
+        // return trinode_restructure(child);
+    } else {
+        parent->is_red = false;
+        uncle->is_red = false;
+
+        // Check that the grandparent is not NULL and not the
+        // root node (parent is not NULL)
+        if(grandparent != NULL && grandparent->parent != NULL) {
+            grandparent->is_red = true;
+            great_grandparent = grandparent->parent;
+
+            if(great_grandparent != NULL && great_grandparent->is_red) {
+                double_red(grandparent);
+                return;
+            }
+        }
+    }
+}
+
 void insert(long key, void * value, struct node * current_node)
 {
     struct node * new_node;
@@ -45,6 +88,11 @@ void insert(long key, void * value, struct node * current_node)
             new_node = construct_node(key, value);
             current_node->left = new_node;
             new_node->parent = current_node;
+
+            if (current_node->is_red) {
+                double_red(new_node);
+                return;
+            }
         }
 
     } else if (key > current_node->key) {
@@ -55,6 +103,11 @@ void insert(long key, void * value, struct node * current_node)
             new_node = construct_node(key, value);
             current_node->right = new_node;
             new_node->parent = current_node;
+
+            if (current_node->is_red) {
+                double_red(new_node);
+                return;
+            }
         }
 
     } else if (key == current_node->key) {
@@ -68,6 +121,7 @@ void set(const char * key, void * value, struct tree * t)
 
     if(t->root == NULL) {
         t->root = construct_node(hash_key, value);
+        t->root->is_red = false;
         return;
     }
 
