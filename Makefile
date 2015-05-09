@@ -9,3 +9,7 @@ testit: test/node_spec.c test/tree_spec.c
 
 example: example/planets.c
 	$(CC) $(CFLAGS) -Iinclude -o build/planets example/planets.c
+
+analyze: example/planets.c
+	$(CC) $(CFLAGS) -Iinclude -S -o build/planets.s example/planets.c
+
