@@ -1,4 +1,4 @@
-CFLAGS=-Wall -pedantic -Wextra
+CFLAGS=-Wall -pedantic -Wextra -std=c99
 
 testit: test/node_spec.c test/tree_spec.c
 	mkdir -p build
@@ -11,5 +11,5 @@ example: example/planets.c
 	$(CC) $(CFLAGS) -Iinclude -o build/planets example/planets.c
 
 analyze: example/planets.c
-	$(CC) $(CFLAGS) -Iinclude -S -o build/planets.s example/planets.c
+	$(CC) $(CFLAGS) -Iinclude -S -O2 -o build/planets.s example/planets.c
 
