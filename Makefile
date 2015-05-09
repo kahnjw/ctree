@@ -6,3 +6,6 @@ testit: test/node_spec.c test/tree_spec.c
 	$(CC) $(CFLAGS) -Iinclude -o build/tree_spec test/tree_spec.c
 	build/node_spec
 	build/tree_spec
+
+example: example/planets.c
+	$(CC) $(CFLAGS) -Iinclude -o build/planets example/planets.c

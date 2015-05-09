@@ -209,7 +209,7 @@ void insert(long key, void * value, struct node * current_node, struct tree * t)
     }
 }
 
-void set(const char * key, void * value, struct tree * t)
+void t_set(const char * key, void * value, struct tree * t)
 {
     long hash_key = hash_sdbm(key);
 
@@ -238,7 +238,7 @@ void * search(long key, struct node * n)
     return NULL;
 }
 
-void * get(const char * key, struct tree * t)
+void * t_get(const char * key, struct tree * t)
 {
     long hash_key = hash_sdbm(key);
 

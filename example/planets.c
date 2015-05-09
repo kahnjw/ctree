@@ -1,12 +1,3 @@
-# Ctree
-
-An experimental red-black tree implemented in C
-
-## Usage
-
-Here is some sample code:
-
-```c
 #include "../src/tree.h"
 
 #define UNUSED(x) (void)(x)
@@ -22,13 +13,6 @@ void noop (void * v) {
 int main ()
 {
     // Store planetary masses in 10^24 kg
-    // The tree constructor function takes a reference to a function
-    // responsible for freeing deleted nodes. This will be called on
-    // every node when delete_tree is called.
-    // This function should be of type:
-    //
-    // void (* func_name)(void *)
-    //
     struct tree * planent_masses = construct_tree(&noop);
 
     struct planet mercury;
@@ -56,12 +40,3 @@ int main ()
 
     return 0;
 }
-```
-
-To run the tests do:
-
-```sh
-$ make testit
-```
-
-![tree](http://i.giphy.com/MZYTTukHJheIU.gif)

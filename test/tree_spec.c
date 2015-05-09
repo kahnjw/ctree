@@ -16,20 +16,20 @@ int main()
             for (i = 0; i < 1000; i++) {
                 buffer = (char *)malloc(4);
                 tostring(buffer, i);
-                set(buffer, buffer, t);
+                t_set(buffer, buffer, t);
             }
 
             tostring(buffer, 999);
-            str_eq(get(buffer, t), buffer);
+            str_eq(t_get(buffer, t), buffer);
 
             tostring(buffer, 567);
-            str_eq(get(buffer, t), buffer);
+            str_eq(t_get(buffer, t), buffer);
 
             tostring(buffer, 876);
-            str_eq(get(buffer, t), buffer);
+            str_eq(t_get(buffer, t), buffer);
 
             tostring(buffer, 123);
-            str_eq(get(buffer, t), buffer);
+            str_eq(t_get(buffer, t), buffer);
 
             delete_tree(t);
         });
