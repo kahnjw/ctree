@@ -33,7 +33,100 @@ long hash_sdbm(const char * str)
     return hash;
 }
 
-void double_red(struct node * child)
+void trinode_restructure(struct node * child, struct tree * t)
+{
+    bool grandparent_is_left;
+    struct node * parent;
+    struct node * grandparent;
+    struct node * great_grandparent;
+    struct node * brother;
+
+    brother = get_sibling(child);
+    parent = child->parent;
+    grandparent = parent->parent;
+    great_grandparent = grandparent->parent;
+    grandparent_is_left = is_left(grandparent);
+
+    if (is_left(child) && is_left(parent)) {
+
+        set_left(grandparent, brother);
+        set_right(parent, grandparent);
+
+        if (grandparent_is_left && great_grandparent != NULL) {
+            set_left(great_grandparent, parent);
+        } else if (great_grandparent != NULL) {
+            set_right(great_grandparent, parent);
+        } else if (grandparent == t->root) {
+            t->root = parent;
+            parent->parent = NULL;
+        }
+
+        parent->is_red = false;
+        grandparent->is_red = true;
+
+    } else if (is_right(child) && is_left(parent)) {
+
+        set_right(parent, child->left);
+
+        set_left(grandparent, child->right);
+
+        set_left(child, parent);
+        set_right(child, grandparent);
+
+        if (grandparent_is_left && great_grandparent != NULL) {
+            set_left(great_grandparent, child);
+        } else if (great_grandparent != NULL) {
+            set_right(great_grandparent, child);
+        } else if (grandparent == t->root) {
+            t->root = child;
+            child->parent = NULL;
+        }
+
+        child->is_red = false;
+        grandparent->is_red = true;
+
+    } else if (is_right(child) && is_right(parent)) {
+
+        set_right(grandparent, brother);
+        set_left(parent, grandparent);
+
+        if (grandparent_is_left && great_grandparent != NULL) {
+            set_left(great_grandparent, parent);
+        } else if (great_grandparent != NULL) {
+            set_right(great_grandparent, parent);
+        } else if (grandparent == t->root) {
+            t->root = parent;
+            parent->parent = NULL;
+        }
+
+        parent->is_red = false;
+        grandparent->is_red = true;
+
+    } else if (is_left(child) && is_right(parent)) {
+
+        set_left(parent, child->right);
+
+        set_right(grandparent, child->left);
+
+        set_right(child, parent);
+        set_left(child, grandparent);
+
+        if (grandparent_is_left && great_grandparent != NULL) {
+            set_left(great_grandparent, child);
+        } else if (great_grandparent != NULL) {
+            set_right(great_grandparent, child);
+        } else if (grandparent == t->root) {
+            t->root = child;
+            child->parent = NULL;
+        }
+
+        child->is_red = false;
+        grandparent->is_red = true;
+
+    }
+}
+
+void double_red(struct node * child, struct tree * t)
 {
     struct node * parent;
     struct node * grandparent;
@@ -57,7 +150,8 @@ void double_red(struct node * child)
     uncle = get_sibling(parent);
 
     if(uncle == NULL || !uncle->is_red) {
-        // return trinode_restructure(child);
+        trinode_restructure(child, t);
+        return;
     } else {
         parent->is_red = false;
         uncle->is_red = false;
@@ -69,28 +163,28 @@ void double_red(struct node * child)
             great_grandparent = grandparent->parent;
 
             if(great_grandparent != NULL && great_grandparent->is_red) {
-                double_red(grandparent);
+                double_red(grandparent, t);
                 return;
             }
         }
     }
 }
 
-void insert(long key, void * value, struct node * current_node)
+void insert(long key, void * value, struct node * current_node, struct tree * t)
 {
     struct node * new_node;
 
     if (key < current_node->key) {
 
         if (current_node->left != NULL) {
-            insert(key, value, current_node->left);
+            insert(key, value, current_node->left, t);
         } else {
             new_node = construct_node(key, value);
             current_node->left = new_node;
             new_node->parent = current_node;
 
             if (current_node->is_red) {
-                double_red(new_node);
+                double_red(new_node, t);
                 return;
             }
         }
@@ -98,14 +192,14 @@ void insert(long key, void * value, struct node * current_node)
     } else if (key > current_node->key) {
 
         if (current_node->right != NULL) {
-            insert(key, value, current_node->right);
+            insert(key, value, current_node->right, t);
         } else {
             new_node = construct_node(key, value);
             current_node->right = new_node;
             new_node->parent = current_node;
 
             if (current_node->is_red) {
-                double_red(new_node);
+                double_red(new_node, t);
                 return;
             }
         }
@@ -125,7 +219,7 @@ void set(const char * key, void * value, struct tree * t)
         return;
     }
 
-    insert(hash_key, value, t->root);
+    insert(hash_key, value, t->root, t);
 }
 
 void * search(long key, struct node * n)

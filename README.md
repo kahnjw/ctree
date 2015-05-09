@@ -1,6 +1,6 @@
 # Ctree
 
-An experimental binary tree implemented in C
+An experimental red-black tree implemented in C
 
 To run the tests do:
 

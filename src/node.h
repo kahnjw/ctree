@@ -58,3 +58,20 @@ struct node * get_sibling(struct node * n)
     return n->parent->left;
 }
 
+void set_left(struct node * n, struct node *left)
+{
+    n->left = left;
+
+    if (left != NULL) {
+        left->parent = n;
+    }
+}
+
+void set_right(struct node * n, struct node *right)
+{
+    n->right = right;
+
+    if (right != NULL) {
+        right->parent = n;
+    }
+}
