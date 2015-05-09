@@ -50,7 +50,7 @@ int main ()
 
     mass = ((struct planet *)t_get("Earth", planent_masses))->mass;
 
-    printf("The mass of earth is %f * 10^24 kg\n", mass);
+    printf("The mass of Earth is %f * 10^24 kg\n", mass);
 
     delete_tree(planent_masses);
 
