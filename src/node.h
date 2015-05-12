@@ -1,3 +1,4 @@
+#include <errno.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
@@ -13,9 +14,22 @@ struct node
     bool is_red;
 };
 
+void log_error(char * msg, int _errno)
+{
+    fprintf(stderr, "ERRNO %d: %s\n", _errno, msg);
+}
+
 struct node * construct_node(long key, void * value)
 {
     struct node * n =  (struct node*) malloc(sizeof(struct node));
+
+    /* Most likely ENOMEM; save program from segfaulting. */
+    if (n == NULL) {
+        int local_err = errno;
+        log_error("Unable to allocate memory in construct_node()", local_err);
+
+        return NULL;
+    }
 
     n->key = key;
     n->value = value;
