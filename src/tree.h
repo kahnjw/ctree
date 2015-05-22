@@ -13,6 +13,15 @@ struct tree
 struct tree * construct_tree(void (*free_func)(void *))
 {
     struct tree * t = (struct tree *)malloc(sizeof(struct tree));
+
+    /* Most likely ENOMEM; save program from segfaulting. */
+    if (t == NULL) {
+        int local_err = errno;
+        log_error("Unable to allocate memory in construct_node()", local_err);
+
+        return NULL;
+    }
+
     t->free_func = free_func;
     t->root = NULL;
 
