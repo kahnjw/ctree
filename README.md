@@ -1,5 +1,7 @@
 # Ctree
 
+[![Build Status](https://travis-ci.org/kahnjw/ctree.png)](https://travis-ci.org/kahnjw/ctree)
+
 An experimental red-black tree implemented in C
 
 ## Usage
